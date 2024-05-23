@@ -1,0 +1,17 @@
+<form action="/" method="POST">
+    {{ form }}
+    {% csrf_token %}
+    <input type="submit" />
+
+</form>
+
+<table>
+    <tr>
+        <th>URL</th><th>Link</th>
+    </tr>
+{% for url in data %}
+    <tr>
+        <td>{{url.url}}</td><td><a href="/u/{{ url.slug }}">http://localhost:8000/u/{{url.slug}}</a></td>
+    </tr>
+{% endfor %}
+</table>

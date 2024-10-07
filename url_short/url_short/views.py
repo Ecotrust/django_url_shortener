@@ -37,11 +37,10 @@ def urlRedirect(request, slugs):
     try:
         data = UrlData.objects.get(slug=slugs)
         
-        # if not data.url.startswith('http'):
-        #     # url = f'https://{data.url}'
-        #     url = data.url
-        # else:
-        url = data.url
+        if not data.url.startswith('/'):
+            url = f'/{data.url}'
+        else:
+            url = data.url
         return redirect(url)
     
     except UrlData.DoesNotExist:

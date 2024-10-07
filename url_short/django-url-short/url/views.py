@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.http import HttpResponse
 from url.forms import Url
 from url.models import UrlData
@@ -15,11 +16,14 @@ def urlShort(request):
             url = form.cleaned_data["url"]
             new_url, created = UrlData.objects.get_or_create(url=url)
             if created:
-                slug = ''.join(random.choice(string.ascii_letters)
-                            for x in range(10))
-                new_url.slug =slug
+                slug = ''.join(random.choice(string.ascii_letters) for x in range(10))
+                new_url.slug = slug
                 new_url.save()
-            return redirect('/')
+
+            shortened_url = request.build_absolute_uri(f'/url_shortener/{new_url.slug}')
+            return JsonResponse({'shortened_url': shortened_url})
+
+        return JsonResponse({'error': 'Invalid form submission'}, status=400)
     else:
         form = Url()
     data = UrlData.objects.all()
@@ -30,10 +34,14 @@ def urlShort(request):
     return render(request, 'index.html', context)
 
 def urlRedirect(request, slugs):
-    data = UrlData.objects.get(slug=slugs)
-    # if the url doesn't start with http, it will be treated and a relative address, rather than absolute. It's 2024, we can assume 'https':
-    if not 'http' == data.url[0:4]:
-        url = 'https://{}'.format(data.url)
-    else:
-        url = data.url
-    return redirect(url)
+    try:
+        data = UrlData.objects.get(slug=slugs)
+        
+        if not data.url.startswith('http'):
+            url = f'https://{data.url}'
+        else:
+            url = data.url
+        return redirect(url)
+    
+    except UrlData.DoesNotExist:
+        return HttpResponse("URL not found", status=404)

@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from url import views
-app_name = "url"
+app_name = "url_short"
 urlpatterns = [
     path("", views.urlShort, name="home"),
-    path("u/<str:slugs>", views.urlRedirect, name="redirect")
+    path("<str:slugs>", views.urlRedirect, name="redirect")
 ]

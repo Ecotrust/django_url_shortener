@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from url import views
+from url_short import views
 app_name = "url_short"
 urlpatterns = [
     path("", views.urlShort, name="home"),

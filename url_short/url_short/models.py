@@ -1,7 +1,7 @@
 from django.db import models
 
 class UrlData(models.Model):
-    url = models.CharField(max_length=2048)
+    url = models.TextField()
     slug = models.CharField(max_length=15)
     def foo(self):
         return UrlData.objects.all()

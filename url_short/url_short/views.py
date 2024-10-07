@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.http import HttpResponse
-from url.forms import Url
-from url.models import UrlData
+from url_short.forms import Url
+from url_short.models import UrlData
 import random, string
 
 
@@ -37,10 +37,11 @@ def urlRedirect(request, slugs):
     try:
         data = UrlData.objects.get(slug=slugs)
         
-        if not data.url.startswith('http'):
-            url = f'https://{data.url}'
-        else:
-            url = data.url
+        # if not data.url.startswith('http'):
+        #     # url = f'https://{data.url}'
+        #     url = data.url
+        # else:
+        url = data.url
         return redirect(url)
     
     except UrlData.DoesNotExist:

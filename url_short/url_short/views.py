@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.http import HttpResponse
-from url_short.forms import Url
-from url_short.models import UrlData
+from .forms import Url
+from .models import UrlData
 import random, string
 
 

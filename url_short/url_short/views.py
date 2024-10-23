@@ -36,10 +36,12 @@ def urlShort(request):
 def urlRedirect(request, slugs):
     try:
         data = UrlData.objects.get(slug=slugs)
-        
-        if not data.url.startswith('/'):
-            url = f'/{data.url}'
+        if data.url.startswith('/'):
+            # If it's a relative path, prepend the full domain
+            domain = request.build_absolute_uri('/')[:-1]  # This gets the full domain with protocol (e.g., 'http://example.com')
+            url = f'{domain}{data.url}'  # Prepend the domain to the relative path
         else:
+            # If it's already a full URL, use it as is
             url = data.url
         return redirect(url)
     
